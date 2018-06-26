@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TTracko</string>
+    <string name="signIn">Sign In</string>
+    <string name="signup">Sign Up</string>
 </resources>
