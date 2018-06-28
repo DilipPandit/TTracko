@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+
+    <ImageView
+        android:id="@+id/ivAppLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/app_logo" />
+
+    <LinearLayout
+        android:id="@+id/llSign"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivAppLogo"
+        android:layout_margin="@dimen/margin20"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin15"
+                android:text="+91" />
+
+            <EditText
+                android:id="@+id/edMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Mobile number"
+                android:maxLength="10"
+                android:inputType="phone" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_height"
+            android:layout_marginTop="@dimen/margin15"
+            android:background="@color/colorPrimary"
+            android:elevation="@dimen/margin5"
+            android:padding="@dimen/margin15"
+            android:text="@string/signIn"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin10"
+            android:text="or"
+            android:textSize="@dimen/text_size_10"
+            android:textStyle="bold" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_height"
+            android:layout_marginTop="@dimen/margin10"
+            android:elevation="@dimen/margin5"
+            android:text="@string/signIn"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llVerify"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivAppLogo"
+        android:visibility="gone"
+        android:layout_margin="@dimen/margin20"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edOtp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="6"
+                android:hint="Enter OTP"
+                android:inputType="phone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resend"
+               />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnVerifyOTP"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_height"
+            android:layout_marginTop="@dimen/margin15"
+            android:background="@color/colorPrimary"
+            android:elevation="@dimen/margin5"
+            android:padding="@dimen/margin15"
+            android:text="@string/verify"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTryOtherNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textStyle="bold"
+            android:padding="@dimen/margin5"
+            android:layout_marginTop="@dimen/margin10"
+            android:text="@string/tryOthernumber"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

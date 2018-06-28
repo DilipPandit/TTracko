@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 
 import com.ttracko.R;
 
@@ -11,7 +12,7 @@ import com.ttracko.R;
  * Created by root on 26/6/18.
  */
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin15"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin15"
+            android:text="+91" />
+
+        <EditText
+            android:id="@+id/edMobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Mobile number"
+            android:inputType="phone"
+            android:maxLength="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin5"
+            android:layout_marginTop="@dimen/margin15"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:elevation="@dimen/margin5"
+            android:padding="@dimen/margin15"
+            android:text="@string/cancel"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin5"
+            android:layout_marginTop="@dimen/margin15"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:elevation="@dimen/margin5"
+            android:padding="@dimen/margin15"
+            android:text="@string/ok"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

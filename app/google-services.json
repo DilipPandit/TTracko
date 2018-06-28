@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "585845360081",
+    "firebase_url": "https://ttracko-ac05b.firebaseio.com",
+    "project_id": "ttracko-ac05b",
+    "storage_bucket": "ttracko-ac05b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585845360081:android:aee51a6a3d88d993",
+        "android_client_info": {
+          "package_name": "com.ttracko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585845360081-vanfdtbsdk0milk0i28evkul509e634o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttracko",
+            "certificate_hash": "6a90c7d266e929444b39ee56f1722a5b8ba6c061"
+          }
+        },
+        {
+          "client_id": "585845360081-aeo3rrlmn5v8pmcre3j98po9ldga6oks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhIMMyglD1NU5oqVjISHZWL-8WBAb8s84"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585845360081-aeo3rrlmn5v8pmcre3j98po9ldga6oks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

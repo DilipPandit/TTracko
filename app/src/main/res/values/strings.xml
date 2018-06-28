@@ -2,4 +2,13 @@
     <string name="app_name">TTracko</string>
     <string name="signIn">Sign In</string>
     <string name="signup">Sign Up</string>
+    <string name="verify">Verify</string>
+    <string name="resend">Resend OTP</string>
+    <string name="tryOthernumber">Try other options</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <!--Warning-->
+    <string name="please_enter_mob">Please enter valide mobile Number</string>
+    <string name="otp_send_faild">OTP faild to send on your Mobile number</string>
+    <string name="otp_sent">OTP has been sent to your mobile number, in case you don\'t get oTP try alternative Mobile number or sign in options   </string>
 </resources>
