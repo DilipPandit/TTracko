@@ -5,6 +5,6 @@ package com.ttracko.home.interfaces;
  */
 
 public interface MobileDialogListner {
-    public void onMobileGet(String mobileNumber);
+    public void onMobileGet(String mobileNumber,String userName);
     public void onMobileCancel();
 }

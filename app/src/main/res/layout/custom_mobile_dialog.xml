@@ -8,19 +8,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/edUserName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin15"
-            android:text="+91" />
-
+            android:hint="@string/enter_your_name"
+            android:inputType="text"
+            android:maxLength="20" />
         <EditText
             android:id="@+id/edMobile"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:hint="Mobile number"
             android:inputType="phone"
             android:maxLength="10" />

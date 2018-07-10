@@ -9,6 +9,8 @@
     <string name="cancel">Cancel</string>
     <!--Warning-->
     <string name="please_enter_mob">Please enter valide mobile Number</string>
+    <string name="please_enter_name">Please enter Name</string>
     <string name="otp_send_faild">OTP faild to send on your Mobile number</string>
-    <string name="otp_sent">OTP has been sent to your mobile number, in case you don\'t get oTP try alternative Mobile number or sign in options   </string>
+    <string name="otp_sent">OTP has been sent to your mobile number, in case you don\'t get OTP try alternative Mobile number\'s or sign in options   </string>
+    <string name="enter_your_name">Your Name</string>
 </resources>

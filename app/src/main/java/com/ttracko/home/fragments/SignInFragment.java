@@ -28,6 +28,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
@@ -40,10 +42,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.ttracko.R;
 import com.ttracko.home.Utils.Util;
 import com.ttracko.home.activities.HomeActivity;
 import com.ttracko.home.interfaces.MobileDialogListner;
+import com.ttracko.home.models.Users;
 
 import java.util.concurrent.TimeUnit;
 
@@ -69,12 +77,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     LinearLayout llVerify;
     @InjectView(R.id.llSign)
     LinearLayout llSign;
+    @InjectView(R.id.edUserName)
+    EditText edUserName;
     @InjectView(R.id.tvTryOtherNumber)
     TextView tvTryOtherNumber;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1432;
 
-    private static final String TAG = "PhoneAuthActivity";
+    private static final String TAG = "KK";
 
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
 
@@ -93,10 +103,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    FirebaseFirestore firebaseFirestore;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_signin, container, false);
         ButterKnife.inject(this, view);
         _init();
         return view;
@@ -112,7 +123,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        ((HomeActivity)getActivity()).getIvAdd().setVisibility(View.GONE);
+        ((HomeActivity) getActivity()).getIvAdd().setVisibility(View.GONE);
     }
 
     private void _init() {
@@ -135,6 +146,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         btnVerifyOTP.setOnClickListener(this);
         tvTryOtherNumber.setOnClickListener(this);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firebaseFirestore.setFirestoreSettings(settings);
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             @Override
@@ -274,14 +290,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             progressDialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             final FirebaseUser user = mAuth.getCurrentUser();
+
                             if (user.getPhoneNumber() != null)
                                 if (Util.validateIsMobile(user.getPhoneNumber()))
                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
                                 else {
                                     Util.showMobileDialog(getActivity(), new MobileDialogListner() {
+
                                         @Override
-                                        public void onMobileGet(String mobileNumber) {
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
+                                        public void onMobileGet(String mobileNumber, String userName) {
+                                            Users users = new Users(userName, mobileNumber);
+                                            checkUserExistance(users);
+
                                         }
 
                                         @Override
@@ -292,9 +312,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 }
                             else {
                                 Util.showMobileDialog(getActivity(), new MobileDialogListner() {
+
                                     @Override
-                                    public void onMobileGet(String mobileNumber) {
-                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
+                                    public void onMobileGet(String mobileNumber, String userName) {
+                                        progressDialog.show();
+                                        Users users = new Users(userName, mobileNumber);
+                                        checkUserExistance(users);
+
                                     }
 
                                     @Override
@@ -309,6 +333,66 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
                         // [START_EXCLUDE]
                         // [END_EXCLUDE]
+                    }
+                });
+    }
+
+    boolean isUserPresent = false;
+
+    private void checkUserExistance(final Users user) {
+        isUserPresent = false;
+        firebaseFirestore.collection("Users").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        try {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.get("Mobile").toString().equalsIgnoreCase(user.Mobile)) {
+                                        isUserPresent = true;
+                                        Util.showOKDialog(getActivity(), "User Already Exist");
+                                        mAuth.signOut();
+                                        progressDialog.dismiss();
+                                        break;
+                                    } else {
+                                        isUserPresent = false;
+                                    }
+                                }
+                                if (!isUserPresent) {
+                                    saveRecord(user);
+                                }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
+                                mAuth.signOut();
+                            }
+                        } catch (Exception e) {
+                            mAuth.signOut();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mAuth.signOut();
+                Log.d(TAG, "Error getting documents." + e.toString());
+            }
+        });
+    }
+
+    private void saveRecord(Users users) {
+        firebaseFirestore.collection("Users").document(users.Mobile)
+                .set(users.toMap(), SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
+
+                    }
+                }).
+                addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -342,7 +426,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
                         progressDialog.dismiss();
-                        Util.showOKDialog(getActivity(),getString(R.string.otp_send_faild));
+                        Util.showOKDialog(getActivity(), getString(R.string.otp_send_faild));
                     }
 
                     @Override
@@ -352,7 +436,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         mResendToken = forceResendingToken;
                         llSign.setVisibility(View.GONE);
                         llVerify.setVisibility(View.VISIBLE);
-                        Util.showOKDialog(getActivity(),getString(R.string.otp_sent));
+                        Util.showOKDialog(getActivity(), getString(R.string.otp_sent));
                     }
                 });
 
@@ -395,7 +479,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 progressDialog.show();
                 break;
             case R.id.btnVerifyOTP:
-                Util.hideKeyboardinFragment(edMobile,getActivity());
+                Util.hideKeyboardinFragment(edMobile, getActivity());
                 progressDialog.show();
                 PhoneAuthCredential credential;
                 if (!edOtp.getText().toString().isEmpty()) {
@@ -421,8 +505,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private boolean valdation() {
 
+        if (edUserName.getText().toString().isEmpty()) {
+            Util.showOKDialog(getActivity(), "Please enter user name");
+            return false;
+
+        }
         if (edMobile.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter mobile number", Toast.LENGTH_SHORT).show();
+            Util.showOKDialog(getActivity(), "Please enter mobile number");
             return false;
         }
         return true;

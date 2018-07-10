@@ -65,17 +65,20 @@ public class Util {
         dialog.setContentView(R.layout.custom_mobile_dialog);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        final EditText edMobile;
+        final EditText edMobile, edUserName;
         Button btnOk, btnCancel;
         edMobile = (EditText) dialog.findViewById(R.id.edMobile);
+        edUserName = (EditText) dialog.findViewById(R.id.edUserName);
         btnOk = (Button) dialog.findViewById(R.id.btnOk);
         btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateIsMobile(edMobile.getText().toString().trim())) {
+                if (edUserName.getText().toString().isEmpty()) {
+                    showToast(context, context.getString(R.string.please_enter_name));
+                } else if (validateIsMobile(edMobile.getText().toString().trim())) {
                     dialog.dismiss();
-                    mobileDialogListner.onMobileGet(edMobile.getText().toString());
+                    mobileDialogListner.onMobileGet(edMobile.getText().toString().trim(), edUserName.getText().toString().trim());
                     hideKeyboardinFragment(edMobile, context);
                 } else {
                     showToast(context, context.getString(R.string.please_enter_mob));
