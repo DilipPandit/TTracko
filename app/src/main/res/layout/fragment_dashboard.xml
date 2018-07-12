@@ -2,13 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
-
-    <TextView
+    android:background="@color/colorBG">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnGroupAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="DashBoard"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_size_25" />
+        android:elevation="@dimen/margin5"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin20"
+        android:src="@drawable/ic_group_add"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcFriendsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

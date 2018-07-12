@@ -11,7 +11,34 @@ import java.util.Map;
 public class Users {
 
     public String Name;
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getMobile() {
+        return Mobile;
+    }
+
+    public void setMobile(String mobile) {
+        Mobile = mobile;
+    }
+
     public String Mobile;
+
+    public String getGroupName() {
+        return GroupName;
+    }
+
+    public void setGroupName(String groupName) {
+        GroupName = groupName;
+    }
+
+    public String GroupName;
 
     public Users() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -26,6 +53,7 @@ public class Users {
         HashMap<String, Object> result = new HashMap<>();
         result.put("Name", Name);
         result.put("Mobile", Mobile);
+        result.put("GroupName", GroupName);
         return result;
     }
 

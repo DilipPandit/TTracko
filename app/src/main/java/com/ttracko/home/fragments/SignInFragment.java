@@ -48,8 +48,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.ttracko.R;
+import com.ttracko.home.Utils.SharedPref;
 import com.ttracko.home.Utils.Util;
-import com.ttracko.home.activities.HomeActivity;
 import com.ttracko.home.interfaces.MobileDialogListner;
 import com.ttracko.home.models.Users;
 
@@ -118,12 +118,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((HomeActivity) getActivity()).getIvAdd().setVisibility(View.GONE);
     }
 
     private void _init() {
@@ -350,9 +344,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     if (document.get("Mobile").toString().equalsIgnoreCase(user.Mobile)) {
                                         isUserPresent = true;
-                                        Util.showOKDialog(getActivity(), "User Already Exist");
-                                        mAuth.signOut();
                                         progressDialog.dismiss();
+                                        SharedPref.init(getContext());
+                                        SharedPref.write(SharedPref.NAME, user.getName());
+                                        SharedPref.write(SharedPref.MOBILE, user.getMobile());
+                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
+
+
                                         break;
                                     } else {
                                         isUserPresent = false;
@@ -378,13 +376,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void saveRecord(Users users) {
+    private void saveRecord(final Users users) {
         firebaseFirestore.collection("Users").document(users.Mobile)
                 .set(users.toMap(), SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
+                        SharedPref.init(getContext());
+                        SharedPref.write(SharedPref.NAME, users.getName());
+                        SharedPref.write(SharedPref.MOBILE, users.getMobile());
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
 
                     }
@@ -452,7 +453,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             Log.d(TAG, "signInWithCredential:success");
                             progressDialog.dismiss();
                             FirebaseUser user = task.getResult().getUser();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.layoutContainer, new DashboardFragment()).commit();
+                            Users users = new Users(edUserName.getText().toString().trim(), edMobile.getText().toString().trim());
+                            checkUserExistance(users);
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI

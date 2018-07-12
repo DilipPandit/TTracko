@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ttracko.R;
@@ -25,7 +24,6 @@ public class HomeActivity extends AppCompatActivity {
     FrameLayout layoutContainer;
     SignInFragment signInFragment;
 
-    ImageView ivAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +37,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void _init() {
-        ivAdd = (ImageView) getSupportActionBar().getCustomView().findViewById(R.id.ivAdd);
         signInFragment = new SignInFragment();
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             getSupportFragmentManager().beginTransaction().replace(layoutContainer.getId(), new DashboardFragment()).commit();
@@ -47,8 +44,5 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(layoutContainer.getId(), signInFragment).commit();
     }
 
-    public ImageView getIvAdd() {
-        return ivAdd;
-    }
 
 }
